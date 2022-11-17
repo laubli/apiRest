@@ -1,9 +1,7 @@
-const Object = require('../models/object');
+const User = require('../models/user');
 
-exports.getObjectList = (req, res, next) => {
-    console.log('methode getObjectList');
-
-    Object.find()
+exports.getUserList = (req, res, next) => {
+    User.find()
         .then((list) => res.status(200).json(list))
         .catch((err) => {
             console.log(err);
@@ -11,26 +9,25 @@ exports.getObjectList = (req, res, next) => {
         })
 }
 
-exports.getOneObjectById = (req, res, next) => {
-    Object.findOne({ _id: req.params.id })
-        .then((obj) => res.status(200).json(obj))
+exports.getOneUserById = (req, res, next) => {
+    User.findOne({ _id: req.params.id })
+        .then((usr) => res.status(200).json(usr))
         .catch((err) => {
             console.log(err);
             res.status(404).json({ message: 'NOT FOUND' });
         })
 }
 
-exports.createObject = (req, res, next) => {
-    const obj = new Object({
-        name: req.body.name,
-        weight: req.body.weight,
-        url: req.body.url,
+exports.createUser = (req, res, next) => {
+    const usr = new User({
+        email: req.body.email,
+        password: req.body.password,
         creationDate: new Date(),
         modificationDate: new Date(),
         active: true,
     })
 
-    obj.save()
+    usr.save()
         .then((saved) => res.status(200).json(saved))
         .catch((err) => {
             console.log(err);
@@ -38,11 +35,15 @@ exports.createObject = (req, res, next) => {
         })
 }
 
-exports.updateObject = (req, res, next) => {
-    Object.findById(req.params.id)
-        .then((obj) => {
+exports.login = (req, res, next) => {
+  res.status(200).json({message: 'OK'})
+}
+
+exports.updateUser = (req, res, next) => {
+    User.findById(req.params.id)
+        .then((usr) => {
             req.body.modificationDate = new Date();
-            Object.updateOne({ _id: obj.id }, req.body)
+            User.updateOne({ _id: usr.id }, req.body)
                 .then((up) => res.status(200).json(up))
                 .catch((err) =>
                     res.status(500).json({ message: 'CANNOT UPDATE', error: err }))
@@ -50,8 +51,8 @@ exports.updateObject = (req, res, next) => {
         .catch(() => res.status(404).json({ message: 'NOT FOUND' }));
 }
 
-exports.deleteObject = (req, res, next) => {
-    Object.findByIdAndDelete(req.params.id)
+exports.deleteUser = (req, res, next) => {
+    User.findByIdAndDelete(req.params.id)
         .then((result) => {
             if(result) {
                 res.status(200).json(result)
