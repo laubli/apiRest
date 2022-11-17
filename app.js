@@ -19,8 +19,14 @@ mongoose.connect(DB, { useNewUrlParser: true, useUnifiedTopology: true})
 app.use(bodyParser.json());
 
 const objectRoute = require('./routes/object');
+const userRoute = require('./routes/user');
 
 app.use('/api/object', objectRoute);
-
+app.use('/api/user', userRoute);
 
 module.exports = app;
+
+/*
+navigator.storage
+window.sessionStorage
+window.localStorage*/
